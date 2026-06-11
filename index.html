@@ -194,13 +194,55 @@ footer { background: var(--primary-dark); padding: 2.5rem 2rem; text-align: cent
 .login-cancel:hover { color: var(--sand); }
 
 /* ─── RESPONSIVE ──────────────────────────── */
-@media (max-width: 700px) {
+/* ─── HAMBURGER ───────────────────────────── */
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 6px; z-index: 300; }
+.hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s; }
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; background: var(--primary-dark); z-index: 190; flex-direction: column; padding: 1rem 0; box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { color: #c8dff4; text-decoration: none; font-size: 1rem; font-weight: 500; padding: 0.85rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.07); transition: background 0.15s; }
+.mobile-menu a:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+@media (max-width: 768px) {
   .nav-links { display: none; }
-  .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .hamburger { display: flex; }
+
+  /* HERO */
+  .hero-img-wrap { position: relative; height: 480px; }
+  .hero-img-wrap img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% center; }
+  .hero-content { min-height: 480px; padding: 3rem 1.25rem; }
+  .hero h1 { font-size: 1.7rem; }
+  .hero p { font-size: 0.95rem; }
+  .hero-ctas { flex-direction: column; align-items: center; gap: 0.75rem; }
+  .btn-primary, .btn-outline { width: 100%; max-width: 280px; text-align: center; }
+
+  /* SECTIONS */
+  section { padding: 3rem 1.25rem; }
+  section.hero { padding: 0; }
+  .section-title { font-size: 1.45rem; }
+
+  /* ABOUT */
+  .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .about-visual { height: 200px; }
+
+  /* PLANS */
+  .plans-grid { grid-template-columns: 1fr; }
+
+  /* NEWS */
+  .news-grid { grid-template-columns: 1fr; }
+  .news-modal { border-radius: 10px 10px 0 0; max-height: 92vh; }
+  .news-modal-backdrop { align-items: flex-end; padding: 0; }
+  .news-modal-img { height: 200px; }
+
+  /* CONTACT */
+  .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .form-row { grid-template-columns: 1fr; }
-  .about-visual { height: 220px; }
-  .hero-img-wrap { height: 380px; }
+
+  /* ADMIN */
   .admin-news-item { flex-direction: column; align-items: flex-start; }
+  .admin-card { padding: 1.25rem; }
 }
 </style>
 </head>
@@ -215,7 +257,18 @@ footer { background: var(--primary-dark); padding: 2.5rem 2rem; text-align: cent
     <li><a href="#news">News</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#membership" onclick="closeMenu()">Membership</a>
+  <a href="#news" onclick="closeMenu()">News</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+</div>
 
 <!-- ═══ HERO ═══════════════════════════════════════════════════════ -->
 <section class="hero">
@@ -697,7 +750,7 @@ function showAdminStatus(msg, ok) {
 // CONTACT FORM — EmailJS
 // ═══════════════════════════════════════════════════════════
 (function() {
-  emailjs.init('HP2Hf0llKdc0foOJK');
+  emailjs.init('YOUR_EMAILJS_PUBLIC_KEY');
 })();
 
 document.getElementById('contactForm').addEventListener('submit', async function(e) {
@@ -716,7 +769,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
   msg.style.display = 'none';
 
   try {
-    await emailjs.send('service_3hzfaeb', 'template_iegeicb', {
+    await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
       from_name: name,
       phone: phone || 'Not provided',
       email: email || 'Not provided',
@@ -750,6 +803,27 @@ function formatDate(d) {
 
 // Init
 renderNews();
+
+// Hamburger
+function toggleMenu() {
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  btn.classList.toggle('open');
+  menu.classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+// Close menu on outside click
+document.addEventListener('click', function(e) {
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  if (!btn.contains(e.target) && !menu.contains(e.target)) {
+    btn.classList.remove('open');
+    menu.classList.remove('open');
+  }
+});
 </script>
 </body>
 </html>
