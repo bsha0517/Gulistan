@@ -697,7 +697,7 @@ function showAdminStatus(msg, ok) {
 // CONTACT FORM — EmailJS
 // ═══════════════════════════════════════════════════════════
 (function() {
-  emailjs.init('YOUR_EMAILJS_PUBLIC_KEY');
+  emailjs.init('HP2Hf0llKdc0foOJK');
 })();
 
 document.getElementById('contactForm').addEventListener('submit', async function(e) {
@@ -716,7 +716,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
   msg.style.display = 'none';
 
   try {
-    await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+    await emailjs.send('service_3hzfaeb', 'template_iegeicb', {
       from_name: name,
       phone: phone || 'Not provided',
       email: email || 'Not provided',
